@@ -124,7 +124,7 @@ class Client
             throw new ApiException($e->getMessage(), $e->getCode());
 
         } catch (GuzzleException $e) {
-            throw new ApiException($e->getMessage(), $e->getCode());
+            throw new ApiException($message, $code, $responseData, $headers);
         }
 
         $this->validateResponse($this->lastResponse);
