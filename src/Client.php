@@ -117,12 +117,18 @@ class Client
 
         try {
             $this->lastResponse = $this->client->request($method, $uri, $options);
+        } catch(RequestException $e) {
+
+            if ($e->hasResponse()) {
+                $this->validateResponse($e->getResponse)
+            }
+            throw new ApiException($e->getMessage(), $e->getCode());
+
         } catch (GuzzleException $e) {
             throw new ApiException($e->getMessage(), $e->getCode());
         }
 
         $this->validateResponse($this->lastResponse);
-
         return $this->lastResponse;
     }
 
