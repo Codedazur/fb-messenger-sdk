@@ -124,7 +124,7 @@ class Client
             throw new ApiException($e->getMessage(), $e->getCode());
 
         } catch (GuzzleException $e) {
-            throw new ApiException($message, $code, $responseData, $headers);
+            throw new ApiException($e->getMessage(), $e->getCode());
         }
 
         $this->validateResponse($this->lastResponse);
@@ -157,8 +157,9 @@ class Client
             $responseData = json_decode((string) $response->getBody(), true);
             $code = isset($responseData['error']['code']) ? $responseData['error']['code'] : 0;
             $message = isset($responseData['error']['message']) ? $responseData['error']['message'] : $response->getReasonPhrase();
+            $headers =  $response->getHeaders();
 
-            throw new ApiException($message, $code, $responseData);
+            throw new ApiException($message, $code, $responseData, $headers);
         }
     }
 
